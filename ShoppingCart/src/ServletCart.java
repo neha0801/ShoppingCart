@@ -1,7 +1,6 @@
 
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,20 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import customTools.DBUtil;
 import model.Product;
 
 /**
- * Servlet implementation class ServletExploreProducts
+ * Servlet implementation class ServletCart
  */
-@WebServlet("/ExploreProducts")
-public class ServletExploreProducts extends HttpServlet {
+@WebServlet("/Cart")
+public class ServletCart extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ServletExploreProducts() {
+    public ServletCart() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,44 +37,43 @@ public class ServletExploreProducts extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String user = request.getParameter("email");
+		int quantity = Integer.parseInt(request.getParameter("quantity"));
 		HttpSession session = request.getSession();
-		session.setAttribute("user", user);
-		List<Product> proList = DBUtil.getAllProducts();
+		Product prodObj= (Product) session.getAttribute("product");
 		
 		String tableData ="";
 		
 		tableData += "<tr>";
 		tableData += "<thead>";
 		tableData += "<th>";
-		tableData += "Product ID";
-		tableData += "</th>";
-		tableData += "<th>"; 
 		tableData += "Product Name";
 		tableData += "</th>";
-		tableData += "<th>";
+		tableData += "<th>"; 
 		tableData += "Price";
 		tableData += "</th>";
+		tableData += "<th>";
+		tableData += "Quantity";
+		tableData += "</th>";
+		tableData += "<th>";
+		tableData += "Total Price";
+		tableData += "</th>";		
 		tableData += "</thead>";
 		tableData += "</tr>";
 		
-		for(Product p : proList){
-			System.out.println(p.getProductname());
-			
-			tableData += "<tr>";
-			tableData += "<td>";
-			tableData += p.getProductid();
-			tableData += "</td>";
-			tableData += "<td>";
-			tableData += "<a href='ProductDetails?productId=" + p.getProductid() + "'>"+p.getProductname() + "</a>";
-			tableData += "</td>";
-			tableData += "<td>";
-			tableData +=  "$"+p.getPrice();
-			tableData += "</td>";
-			tableData += "</tr>";
-		}
-		request.setAttribute("tableData", tableData);
-		getServletContext().getRequestDispatcher("/ProductList.jsp").forward(request, response);
-	}
+		tableData+="<tr>";
+		tableData += "<td>";
+		tableData += prodObj.getProductname();
+		tableData += "</td>";
+		tableData += "<td>";
+		tableData += "$"+prodObj.getPrice();
+		tableData += "</td>";
+		tableData += "<td>";
+		tableData += quantity;
+		tableData += "</td>";
+		tableData += "<td>";
+		Double totalPrice = quantity * prodObj.getPrice().doubleValue();  
+		tableData +=  "$"+(totalPrice);
+		tableData += "</td>";
+		tableData += "</tr>";	}
 
 }
