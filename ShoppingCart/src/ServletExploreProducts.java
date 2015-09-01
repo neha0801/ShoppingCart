@@ -32,15 +32,24 @@ public class ServletExploreProducts extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
+			
+		doPost(request,response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String user = request.getParameter("email");
+		String gotoStr =request.getParameter("goto");
 		HttpSession session = request.getSession();
+		String user ="";
+		if(gotoStr!=null){
+			if(gotoStr.equalsIgnoreCase("y"))
+				user=(String) session.getAttribute("user");
+		}else
+			user = request.getParameter("name");
+		
 		session.setAttribute("user", user);
 		List<Product> proList = DBUtil.getAllProducts();
 		
@@ -49,7 +58,7 @@ public class ServletExploreProducts extends HttpServlet {
 		tableData += "<tr>";
 		tableData += "<thead>";
 		tableData += "<th>";
-		tableData += "Product ID";
+		tableData += "";
 		tableData += "</th>";
 		tableData += "<th>"; 
 		tableData += "Product Name";
@@ -65,7 +74,7 @@ public class ServletExploreProducts extends HttpServlet {
 			
 			tableData += "<tr>";
 			tableData += "<td>";
-			tableData += p.getProductid();
+			tableData += "<img src='" + p.getPicturepath() + "' width ='200' height='200' style=align:center>";
 			tableData += "</td>";
 			tableData += "<td>";
 			tableData += "<a href='ProductDetails?productId=" + p.getProductid() + "'>"+p.getProductname() + "</a>";
@@ -75,6 +84,7 @@ public class ServletExploreProducts extends HttpServlet {
 			tableData += "</td>";
 			tableData += "</tr>";
 		}
+		System.out.println("user " + session.getAttribute("user"));
 		request.setAttribute("tableData", tableData);
 		getServletContext().getRequestDispatcher("/ProductList.jsp").forward(request, response);
 	}

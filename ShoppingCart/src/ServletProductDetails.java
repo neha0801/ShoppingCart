@@ -54,10 +54,11 @@ public class ServletProductDetails extends HttpServlet {
 			details +=prodObj.getPrice() + "</p></div</div>";
 			
 		}
-		details += "<br><form action=Cart method='post'> <label>Quantity</label> <input type='number' name='quantity'></input><br><br>"
-				+ " <input type='submit'class='btn pull-left btn-success btn-lg' value='Purchase'></input> "
-				+ "<input type='submit'	class='btn pull-right btn-warning btn-lg' value='Cancel'></input></form>";
-		System.out.println(details);
+		details += "<br><form name='myForm' action=Cart method='post' onsubmit='return validateForm()'> "
+				+ "<label>Quantity</label> <input type='number' name='quantity'></input><br><br>"
+				+ " <input type='submit'class='btn pull-left btn-success btn-lg' value='Add to Cart'></input> "
+				+ "</form><a href='ExploreProducts'	class='btn pull-right btn-primary btn-lg'>Go Back</a>";
+		
 		request.setAttribute("details", details);
 		getServletContext().getRequestDispatcher("/ProductDetails.jsp").forward(request, response);
 	}

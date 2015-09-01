@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,21 +11,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import customTools.DBUtil;
 import model.Cart;
-import model.Product;
+import customTools.DBUtil;
 
 /**
- * Servlet implementation class ServletCart
+ * Servlet implementation class ServletOrderConfirmation
  */
-@WebServlet("/Cart")
-public class ServletCart extends HttpServlet {
+@WebServlet("/OrderConfirmation")
+public class ServletOrderConfirmation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ServletCart() {
+    public ServletOrderConfirmation() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,43 +40,27 @@ public class ServletCart extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String quanStr= request.getParameter("quantity");
 		HttpSession session = request.getSession();
-		Product prodObj= (Product) session.getAttribute("product");
-		String userEmail = (String) session.getAttribute("user");
+		String user=(String) session.getAttribute("user");
+		Random r = new Random();
+		int confirmationNumber = 1+ r.nextInt(1000000);
+		DBUtil.updateStatus(1, user);
 
-		Cart cObj = new Cart();
-		if(quanStr!=null){
-			int quantity = Integer.parseInt(quanStr);
-			cObj.setQuantity(quantity);
-			Double totalPrice = quantity * prodObj.getPrice().doubleValue();  
-			cObj.setTotalprice(totalPrice);
-			cObj.setProduct(prodObj);
-			cObj.setUseremail(userEmail);
-			cObj.setStatus(0);
-			if(DBUtil.itemExists(cObj)){
-				DBUtil.update(cObj);
-			}else
-				DBUtil.insert(cObj);
-		}		
-		String cartData = showCart(userEmail);
-		request.setAttribute("cartData", cartData);
-		String buttons= "";
-		buttons +=  "<br><a href='OrderConfirmation' class='btn pull-right btn-primary btn-lg'>CheckOut</a>";
-		buttons +=  "<a class='btn pull-left btn-warning btn-lg'>Empty your cart</a>";
-		request.setAttribute("buttons", buttons);
-		request.setAttribute("user", userEmail);
-		getServletContext().getRequestDispatcher("/CartCheckout.jsp").forward(request, response);
+		String message = "";
+		message= "<h1> Your Order confirmation number is " + confirmationNumber + "</h1>";
+		message+=showCart(user);
+		request.setAttribute("message", message);
+		getServletContext().getRequestDispatcher("/OrderConfirmation.jsp").forward(request, response);
 	}
 	
-	private String showCart(String userEmail){
-		List<Cart> cartList = DBUtil.getCart(userEmail);
+	private String showCart(String user){
+		List<Cart> orderList = DBUtil.getOrderedCart(user);
 		
 		String tableData ="";
 
-		if(cartList!=null)
+		if(orderList!=null)
 		{
-			
+			tableData+="<table class='table table-bordered table-striped'>";
 			tableData += "<tr>";
 			tableData += "<thead>";
 			tableData += "<th>";
@@ -94,13 +78,10 @@ public class ServletCart extends HttpServlet {
 			tableData += "<th>";
 			tableData += "TotalPrice";
 			tableData += "</th>";
-			tableData += "<th>";
-			tableData += "";
-			tableData += "</th>";
 			tableData += "</thead>";
 			tableData += "</tr>";
 			
-			for(Cart c : cartList){
+			for(Cart c : orderList){
 				tableData += "<tr>";
 				tableData += "<td>";
 				tableData += "<img src='" + c.getProduct().getPicturepath() + "' width ='200' height='200' style=align:center>";
@@ -117,16 +98,13 @@ public class ServletCart extends HttpServlet {
 				tableData += "<td>";
 				tableData +=  "$"+c.getTotalprice();
 				tableData += "</td>";
-				tableData += "<td>";
-				tableData +=  "<a class='btn btn-danger btn-sm' href='EditCart?prodId=" + c.getProduct().getProductid() + "'>Delete</a>";
-				tableData += "</td>";
 				tableData += "</tr>";
 			}
+			tableData += "</table>";
 		}else
 			tableData="Your Cart is empty";
 
 		return tableData;
 	}
-	
 
 }

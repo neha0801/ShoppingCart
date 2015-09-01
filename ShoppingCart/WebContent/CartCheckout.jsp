@@ -17,7 +17,7 @@
 h1 {
 	text-align: center;
 	color: black;
-	font-size: 80px;
+	font-size: 50px;
 	font-family: "Edwardian Script ITC";
 }
 
@@ -31,36 +31,29 @@ nav {
 	font-family: "Edwardian Script ITC";
 	color: red;
 }
-
+ 
 </style>
-<script>
-function validateForm() {
-    var x = document.forms["myForm"]["quantity"].value;
-    if (x == null || x == 0) {
-        alert("Quantity has to be at least 1");
-        return false;
-    }
-    return true;
-} 
-</script>
 </head>
 <nav class="navbar navbar-inverse">
 <div class="container-fluid">
 	<div class="navbar-brand">EvilCorp-Gulp Web Store</div>
 	<div>
 		<ul class="nav navbar-nav">
-			<li><a href="ExplorePorducts?goto=y" style="color: white"><b>Home</b></a></li>
-			<li><a href="Cart" style="color: white"><b>Your Cart</b></a></li>	
-			
+			<li><a href="ExploreProducts?goto=y" style="color: white"><b>Home</b></a></li>			
+			<li><a href="Cart" style="color: white"><b>Your Cart</b></a></li>
 		</ul>
 	</div>
 </div>
 </nav>
 <body>
+<a href="ExploreProducts?goto=y" class="btn pull-right btn-primary btn-lg"  >Go Back</a><br><br>
 		<h1 align=center>
-				<b>Watches</b>
-			</h1>
-			<br>
-		${details}
+				<b>${user}'s Cart</b><br><br>
+			</h1>	
+		
+		<div><table class='table table-bordered table-striped'>
+		${cartData}			
+	</table></div>
+	<div>${buttons}</div>
 </body>
 </html>

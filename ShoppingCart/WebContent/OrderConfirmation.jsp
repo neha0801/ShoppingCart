@@ -16,20 +16,16 @@
 <style>
 h1 {
 	text-align: center;
-	color: white;
+	color: black;
 	font-size: 80px;
 	font-family: "Edwardian Script ITC";
 }
 
 body {
-	font-family: "Edwardian Script ITC";
+	font-family: "Times new Roman";
 	color: black;
-	background-image: url('image.jpg');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center; 
-    background-color: black; 
-	font-size: 30px;
+
+	font-size: 15px;
 }
 
 navbar {
@@ -40,34 +36,36 @@ navbar {
   .panel-transparent {
         background: none;
     }
+    
+ table td{border-color:red;}
+/*unvisited link*/
+a:link {color: black;}
+/* visited link */
+a:visited {
+    color: black;
+}
+/* mouse over link */
+a:hover {
+    color: red;
+}
+/* selected link */
+a:active {
+    color: red;
+}
 </style>
 </head>
-<nav class="navbar navbar-inverse" style=font-size:30px>
+<nav class="navbar navbar-inverse">
 <div class="container-fluid">
 	<div class="navbar-brand" style=color:red>EvilCorp-Gulp Web Store</div>
+	<div>
+		<ul class="nav navbar-nav">
+			<li><a href="ExploreProducts?goto=y" style="color: white"><b>Home</b></a></li>
+			<li><a href="Cart" style="color: white"><b>Your Cart</b></a></li>
+		</ul>
+	</div>
 </div>
 </nav>
 <body>
-	<h1 ><b>Welcome!! 
-		<br> Explore our amazing collection</b>
-	</h1>
-	<br>
-	<br>
-	<br>
-
-	<div class="panel-group col-sm-3 col-sm-offset-4" style=width:30%>
-		<div class="panel panel-inverse">
-			<div class="panel-body">
-				<form action="ExploreProducts" method=post>
-					<label>Your Name:</label> <input type="text"
-						name="name"></input><br></br> <input type="submit"
-						class="btn pull-left btn-primary btn-lg" value="Explore"></input><br></br>
-				</form>
-			</div>
-		</div>
-
-
-	</div>
-
+${message}
 </body>
 </html>

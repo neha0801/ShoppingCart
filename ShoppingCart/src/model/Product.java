@@ -1,8 +1,11 @@
 package model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
@@ -25,6 +28,10 @@ public class Product implements Serializable {
 	private BigDecimal price;
 
 	private String productname;
+
+	//bi-directional many-to-one association to Cart
+	@OneToMany(mappedBy="product")
+	private List<Cart> carts;
 
 	public Product() {
 	}
@@ -67,6 +74,28 @@ public class Product implements Serializable {
 
 	public void setProductname(String productname) {
 		this.productname = productname;
+	}
+
+	public List<Cart> getCarts() {
+		return this.carts;
+	}
+
+	public void setCarts(List<Cart> carts) {
+		this.carts = carts;
+	}
+
+	public Cart addCart(Cart cart) {
+		getCarts().add(cart);
+		cart.setProduct(this);
+
+		return cart;
+	}
+
+	public Cart removeCart(Cart cart) {
+		getCarts().remove(cart);
+		cart.setProduct(null);
+
+		return cart;
 	}
 
 }

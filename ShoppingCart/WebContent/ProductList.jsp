@@ -24,14 +24,14 @@ h1 {
 body {
 	font-family: "Times new Roman";
 	color: black;
-	background-image: url('tiffany.jpg');
-	background-size:cover;
+
 	font-size: 15px;
 }
 
-nav {
+navbar {
 	font-family: "Edwardian Script ITC";
 	color: red;
+	;
 }
   .panel-transparent {
         background: none;
@@ -56,10 +56,11 @@ a:active {
 </head>
 <nav class="navbar navbar-inverse">
 <div class="container-fluid">
-	<div class="navbar-brand">EvilCorp-Gulp Web Store</div>
+	<div class="navbar-brand" style=color:red>EvilCorp-Gulp Web Store</div>
 	<div>
 		<ul class="nav navbar-nav">
-			<li><a href="#" style="color: white"><b>Home</b></a></li>
+			<li><a href="ExploreProducts?goto=y" style="color: white"><b>Home</b></a></li>
+			<li><a href="Cart" style="color: white"><b>Your Cart</b></a></li>
 		</ul>
 	</div>
 </div>
